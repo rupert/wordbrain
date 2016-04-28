@@ -8,7 +8,6 @@ class Node(object):
     def __init__(self):
         self.children = dict()
         self.depths = set()
-        self.end = False
 
     def add_word(self, word):
         self.depths.add(len(word))
