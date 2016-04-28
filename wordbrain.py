@@ -112,7 +112,7 @@ class Grid(object):
         for path in paths:
             word = grid.get_word(path)
             words.append(word)
-            grid = self.clone()
+            grid = grid.clone()
             grid.remove_path(path)
 
         return words
