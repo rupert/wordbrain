@@ -71,15 +71,14 @@ class Grid(object):
     @classmethod
     def from_string(cls, grid):
         n = len(grid)
-        size = math.sqrt(n)
 
-        if size != int(size):
-            raise ValueError('Must be a square grid!')
-
-        size = int(size)
-
-        if size == 0:
+        if n == 0:
             raise ValueError('Empty grid!')
+
+        size = int(math.sqrt(n))
+
+        if size * size != n:
+            raise ValueError('Must be a square grid!')
 
         grid = [list(x) for x in chunks(grid, size)]
 
