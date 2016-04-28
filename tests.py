@@ -43,8 +43,6 @@ def test_solve():
     ])
     solutions = grid.solve(d, [4])
 
-    print solutions
-
     assert solutions == [
         [[Point(1, 1), Point(0, 0), Point(0, 1), Point(1, 0)]],
         [[Point(1, 1), Point(0, 0), Point(1, 0), Point(0, 1)]]
