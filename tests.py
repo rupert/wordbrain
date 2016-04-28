@@ -48,4 +48,3 @@ def test_solve():
 
     for solution in solutions:
         assert grid.get_words(solution) == ['PASS']
-
