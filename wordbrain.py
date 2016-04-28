@@ -207,7 +207,7 @@ class Grid(object):
 def build_dictionary(n):
     dictionary = Node()
 
-    with open('/Users/rupert/Downloads/dictionary.txt') as f:
+    with open('/usr/share/dict/words') as f:
         for line in f:
             word = line.rstrip()
 
