@@ -3,8 +3,6 @@ import copy
 import math
 from collections import namedtuple
 
-not_found = object()
-
 
 class Node(object):
     def __init__(self):
@@ -17,9 +15,9 @@ class Node(object):
 
         c, rest = word[0], word[1:]
 
-        node = self.children.get(c, not_found)
+        node = self.children.get(c)
 
-        if node is not_found:
+        if node is None:
             node = Node()
             self.children[c] = node
 
@@ -215,7 +213,6 @@ def build_dictionary(n):
             word = line.rstrip()
 
             if len(word) in n:
-                count += 1
                 word = word.upper()
                 dictionary.add_word(word)
 
