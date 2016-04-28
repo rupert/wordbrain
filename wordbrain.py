@@ -24,7 +24,7 @@ class Node(object):
             self.children[c] = node
 
         if len(rest) == 0:
-            node.end = True
+            node.depths.add(0)
         else:
             node.add_word(rest)
 
@@ -37,16 +37,16 @@ class Node(object):
             return False
 
         if len(rest) == 0:
-            return node.end
+            return 0 in node.depths
         else:
             return node.is_word(rest)
 
     def is_prefix(self, word, n):
-        if len(word) == 0:
-            return True
-
         if n not in self.depths:
             return False
+
+        if len(word) == 0:
+            return True
 
         c, rest = word[0], word[1:]
 
@@ -210,11 +210,12 @@ class Grid(object):
 def build_dictionary(n):
     dictionary = Node()
 
-    with open('/usr/share/dict/words') as f:
+    with open('/Users/rupert/Downloads/dictionary.txt') as f:
         for line in f:
             word = line.rstrip()
 
             if len(word) in n:
+                count += 1
                 word = word.upper()
                 dictionary.add_word(word)
 
