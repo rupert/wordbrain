@@ -8,10 +8,13 @@ not_found = object()
 
 class Node(object):
     def __init__(self):
-        self.children = {}
+        self.children = dict()
+        self.depths = set()
         self.end = False
 
     def add_word(self, word):
+        self.depths.add(len(word))
+
         c, rest = word[0], word[1:]
 
         node = self.children.get(c, not_found)
@@ -38,9 +41,12 @@ class Node(object):
         else:
             return node.is_word(rest)
 
-    def is_prefix(self, word):
+    def is_prefix(self, word, n):
         if len(word) == 0:
             return True
+
+        if n not in self.depths:
+            return False
 
         c, rest = word[0], word[1:]
 
@@ -49,7 +55,7 @@ class Node(object):
         if node is None:
             return False
 
-        return self.is_prefix(rest)
+        return node.is_prefix(rest, n - 1)
 
 
 Point = namedtuple('Point', ['x', 'y'])
@@ -195,7 +201,7 @@ class Grid(object):
                     if dictionary.is_word(word):
                         paths.append(new_path)
                 else:
-                    if dictionary.is_prefix(word):
+                    if dictionary.is_prefix(word, len(path) + n):
                         paths.extend(self.search(dictionary, n - 1, new_path))
 
         return paths
