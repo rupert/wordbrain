@@ -15,10 +15,8 @@ def test_is_word():
 
 
 def test_is_prefix():
-    word = 'foo'
-
     d = Node()
-    d.add_word(word)
+    d.add_word('foo')
 
     assert d.is_prefix('f', 3)
     assert d.is_prefix('fo', 3)
