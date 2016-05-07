@@ -15,4 +15,6 @@ CHEESE NAE
 CHEESE FAN
 CHEESE FAE
 CHEESE EAN
+$ python wordbrain.py --first kwgeltlalrhlffapercpeecnostaerarcnrashnaueimteneabiligatoecdscnb 7 4 3 5 7 8 6 7 6 4 4 3
+ESCAPEE LORN KRU CABER HEPATIC LERNAEAN SESHAT TANGHAN SHABAN MILD TICE GEO
 ```
