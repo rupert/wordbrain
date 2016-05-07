@@ -139,23 +139,28 @@ class Grid(object):
     def clone(self):
         return self.__class__(self.grid)
 
-    def solve(self, dictionary, ns):
+    def solve(self, dictionary, ns, permute=False):
         if len(ns) == 1:
             paths = self.search(dictionary, ns[0])
             solutions = [[path] for path in paths]
         else:
+            if permute:
+                indexes = xrange(len(ns))
+            else:
+                indexes = [0]
+
             solutions = []
 
-            for i in xrange(len(ns)):
-                n = ns[i]
+            for index in indexes:
+                n = ns[index]
+                new_ns = ns[0:index] + ns[index+1:]
 
                 paths = self.search(dictionary, n)
 
                 for path in paths:
                     new_grid = self.clone()
                     new_grid.remove_path(path)
-                    new_ns = ns[0:i] + ns[i+1:]
-                    sub_solutions = new_grid.solve(dictionary, new_ns)
+                    sub_solutions = new_grid.solve(dictionary, new_ns, permute)
 
                     for solution in sub_solutions:
                         solutions.append([path] + solution)
@@ -221,13 +226,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('grid')
     parser.add_argument('n', type=int, nargs='+')
+    parser.add_argument('--permute', action='store_true')
     args = parser.parse_args()
 
     dictionary = build_dictionary(args.n)
 
     grid = Grid.from_string(args.grid.upper())
 
-    solutions = grid.solve(dictionary, args.n)
+    solutions = grid.solve(dictionary, args.n, permute=args.permute)
 
     for solution in solutions:
         words = grid.get_words(solution)
