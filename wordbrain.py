@@ -139,9 +139,9 @@ class Grid(object):
     def clone(self):
         return self.__class__(self.grid)
 
-    def solve(self, dictionary, ns, permute=False):
+    def solve(self, dictionary, ns, permute=False, first=False):
         if len(ns) == 1:
-            paths = self.search(dictionary, ns[0])
+            paths = self.search(dictionary, ns[0], first=first)
             solutions = [[path] for path in paths]
         else:
             if permute:
@@ -160,14 +160,17 @@ class Grid(object):
                 for path in paths:
                     new_grid = self.clone()
                     new_grid.remove_path(path)
-                    sub_solutions = new_grid.solve(dictionary, new_ns, permute)
+                    sub_solutions = new_grid.solve(dictionary, new_ns, permute=permute, first=first)
+
+                    if first and sub_solutions:
+                        return [[path] + sub_solutions[0]]
 
                     for solution in sub_solutions:
                         solutions.append([path] + solution)
 
         return solutions
 
-    def search(self, dictionary, n, path=None):
+    def search(self, dictionary, n, path=None, first=False):
         if path is None:
             path = list()
             min_x = 0
@@ -200,10 +203,13 @@ class Grid(object):
 
                 if n == 1:
                     if dictionary.is_word(word):
-                        paths.append(new_path)
+                        if first:
+                            return [new_path]
+                        else:
+                            paths.append(new_path)
                 else:
                     if dictionary.is_prefix(word, len(path) + n):
-                        paths.extend(self.search(dictionary, n - 1, new_path))
+                        paths.extend(self.search(dictionary, n - 1, new_path, first))
 
         return paths
 
@@ -227,13 +233,14 @@ if __name__ == '__main__':
     parser.add_argument('grid')
     parser.add_argument('n', type=int, nargs='+')
     parser.add_argument('--permute', action='store_true')
+    parser.add_argument('--first', action='store_true')
     args = parser.parse_args()
 
     dictionary = build_dictionary(args.n)
 
     grid = Grid.from_string(args.grid.upper())
 
-    solutions = grid.solve(dictionary, args.n, permute=args.permute)
+    solutions = grid.solve(dictionary, args.n, permute=args.permute, first=args.first)
 
     for solution in solutions:
         words = grid.get_words(solution)
